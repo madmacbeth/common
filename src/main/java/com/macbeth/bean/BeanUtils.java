@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -53,7 +54,7 @@ public class BeanUtils {
         Objects.requireNonNull(source);
         Objects.requireNonNull(target);
 
-        getDeclaredFieldsStream(source.getClass()).forEach(field ->  {
+        getDeclaredFieldsStream(source).forEach(field ->  {
             try {
                 copyPropertiesWithComplex(source, target, ignoreNull, field);
             } catch (IllegalAccessException e) {
@@ -69,7 +70,10 @@ public class BeanUtils {
     }
 
     private static Stream<Field> getDeclaredFieldsStream(Object source) {
-        return Arrays.stream(source.getClass().getDeclaredFields());
+        Field[] fields = source.getClass().getDeclaredFields();
+        String collect = Arrays.stream(fields).map(field -> field.getName()).collect(Collectors.joining(","));
+        log.info("目标对象的字段{}",collect);
+        return Arrays.stream(fields);
     }
 
     private static void copySimpleProperties(Object source, Object target, Boolean ignoreNull, Class<?> targetClass, Field field) {
@@ -97,6 +101,7 @@ public class BeanUtils {
     }
 
     private static void copyPropertiesWithComplex(Object source, Object target, Boolean ignoreNull, Field field) throws IllegalAccessException, NoSuchFieldException, IOException, ClassNotFoundException {
+        log.info("正在处理字段{}", field.getName());
         field.setAccessible(true);
         if (isSimpleObject(field.getType())) {
             fillSimpleProperties(source,target, ignoreNull, target.getClass(), field);

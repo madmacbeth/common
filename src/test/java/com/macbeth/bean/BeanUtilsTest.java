@@ -22,10 +22,15 @@ public class BeanUtilsTest {
         User user = new User();
         user.setAInteger(1);
         user.setALong(2L);
-//        user.setAString("chenwei");
+        user.setAString("chenwei");
+        User subUser = new User();
+        subUser.setAString("sub user");
+        subUser.setALong(1L);
+        subUser.setAInteger(2);
+        user.setSubUser(subUser);
         UserVo userVo = new UserVo();
         userVo.setAString("macbeth");
-        BeanUtils.copyProperties(user, userVo, true);
+        BeanUtils.copyPropertiesWithComplexProperty(user, userVo, true);
         System.out.println(userVo);
     }
 

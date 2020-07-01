@@ -12,4 +12,5 @@ public class UserVo {
     private Integer aInteger;
     private Long aLong;
     private String aString;
+    private User subUser;
 }

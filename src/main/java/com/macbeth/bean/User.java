@@ -15,5 +15,6 @@ public class User implements Copyable {
     private Integer aInteger;
     private Long aLong;
     private String aString;
+    private User subUser;
     private List<String> strings = Lists.newArrayList();
 }
